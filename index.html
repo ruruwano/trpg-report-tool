@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<script>
-const params = new URLSearchParams(location.search);
-const ogImage = params.get("image");
-if (ogImage) {
-  document.write(
-    `<meta property="og:image" content="${ogImage}">`
-  );
-}
-</script>
+  <script>
+  const params = new URLSearchParams(location.search);
+  const ogImage = params.get("image");
+  if (ogImage) {
+    document.write(
+      `<meta property="og:image" content="${ogImage}">`
+    );
+  }
+  </script>
 
   <meta charset="UTF-8">
   <title>TRPG 卓報告メーカー</title>
@@ -164,3 +164,4 @@ window.onload = () => {
 
 </body>
 </html>
+
