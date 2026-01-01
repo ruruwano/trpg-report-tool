@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<script>
+const params = new URLSearchParams(location.search);
+const ogImage = params.get("image");
+if (ogImage) {
+  document.write(
+    `<meta property="og:image" content="${ogImage}">`
+  );
+}
+</script>
+
   <meta charset="UTF-8">
   <title>TRPG 卓報告メーカー</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TRPG 卓報告">
+  <meta property="og:description" content="卓報告まとめ">
+  <meta property="og:image" content="">
+
   <style>
     body {
       font-family: sans-serif;
@@ -110,15 +126,18 @@ ${members}
   document.getElementById("result").textContent = text;
 
   // 🔗 URL更新
-  const url =
-    `${location.pathname}?` +
-    `system=${encodeURIComponent(system)}` +
-    `&scenario=${encodeURIComponent(scenario)}` +
-    `&kp=${encodeURIComponent(kp)}` +
-    `&players=${encodeURIComponent(JSON.stringify(playersData))}`;
+const imageUrl = document.getElementById("imageUrl").value;
 
-  history.replaceState(null, "", url);
-}
+const url =
+  `${location.pathname}?` +
+  `system=${encodeURIComponent(system)}` +
+  `&scenario=${encodeURIComponent(scenario)}` +
+  `&kp=${encodeURIComponent(kp)}` +
+  `&players=${encodeURIComponent(JSON.stringify(playersData))}` +
+  `&image=${encodeURIComponent(imageUrl)}`;
+
+history.replaceState(null, "", url);
+
 
 function copyText() {
   const text = document.getElementById("result").textContent;
