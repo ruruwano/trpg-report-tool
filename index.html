@@ -65,9 +65,12 @@
 
 <button onclick="copyText()">コピーする</button>
 
-<script>
-  alert("JS 開始");
+<h2>OGP用HTML</h2>
+<pre id="ogpResult"></pre>
+<button onclick="copyOgp()">OGP用HTMLをコピー</button>
 
+
+<script>
 function getParam(name) {
   const params = new URLSearchParams(window.location.search);
   return params.get(name) || "";
@@ -136,6 +139,13 @@ function copyText() {
   });
 }
 
+  function copyOgp() {
+  const text = document.getElementById("ogpResult").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("OGP用HTMLをコピーしました！");
+  });
+}
+
 window.onload = () => {
   document.getElementById("system").value = getParam("system");
   document.getElementById("scenario").value = getParam("scenario");
@@ -149,12 +159,35 @@ window.onload = () => {
   }
 };
 
-console.log("JS 最後まで読まれてる");
+  function generateOgpHtml() {
+  const scenario = document.getElementById("scenario").value;
+  const imageUrl = document.getElementById("imageUrl").value;
+
+  const ogpHtml =
+`<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TRPG 卓報告">
+<meta property="og:description" content="${scenario}">
+<meta property="og:image" content="${imageUrl}">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<p>TRPG 卓報告ページ</p>
+</body>
+</html>`;
+
+  document.getElementById("ogpResult").textContent = ogpHtml;
+}
+
 </script>
 
 
 </body>
 </html>
+
 
 
 
