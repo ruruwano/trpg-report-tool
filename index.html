@@ -71,8 +71,6 @@ function getParam(name) {
   return params.get(name) || "";
 }
 
-let playerCount = 0;
-
 function addPlayer(pc = "", pl = "") {
   const container = document.getElementById("players");
   const div = document.createElement("div");
@@ -116,19 +114,18 @@ ${members}
 
   document.getElementById("result").textContent = text;
 
-  // 🔗 URL更新
-const imageUrl = document.getElementById("imageUrl").value;
+  const imageUrl = document.getElementById("imageUrl").value;
 
-const url =
-  `${location.pathname}?` +
-  `system=${encodeURIComponent(system)}` +
-  `&scenario=${encodeURIComponent(scenario)}` +
-  `&kp=${encodeURIComponent(kp)}` +
-  `&players=${encodeURIComponent(JSON.stringify(playersData))}` +
-  `&image=${encodeURIComponent(imageUrl)}`;
+  const url =
+    `${location.pathname}?` +
+    `system=${encodeURIComponent(system)}` +
+    `&scenario=${encodeURIComponent(scenario)}` +
+    `&kp=${encodeURIComponent(kp)}` +
+    `&players=${encodeURIComponent(JSON.stringify(playersData))}` +
+    `&image=${encodeURIComponent(imageUrl)}`;
 
-history.replaceState(null, "", url);
-
+  history.replaceState(null, "", url);
+}
 
 function copyText() {
   const text = document.getElementById("result").textContent;
@@ -137,7 +134,6 @@ function copyText() {
   });
 }
 
-// 🔁 URLから復元
 window.onload = () => {
   document.getElementById("system").value = getParam("system");
   document.getElementById("scenario").value = getParam("scenario");
@@ -151,12 +147,13 @@ window.onload = () => {
   }
 };
 
-  console.log("JS 最後まで読まれてる");
+console.log("JS 最後まで読まれてる");
 </script>
 
 
 </body>
 </html>
+
 
 
 
