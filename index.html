@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>TRPG 卓報告メーカー</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    textarea, input {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<h1>TRPG 卓報告メーカー</h1>
+
+<label>システム名</label>
+<input id="system" value="クトゥルフ神話TRPG">
+
+<label>シナリオ名</label>
+<input id="scenario" placeholder="初恋性ストックホルム症候群">
+
+<label>卓報告画像URL</label>
+<input id="imageUrl" placeholder="https://...">
+
+
+<label>KP</label>
+<input id="kp" placeholder="るわの">
+
+<h2>PL / PC</h2>
+
+<div id="players"></div>
+
+<button onclick="addPlayer()">＋ 人数追加</button>
+
+
+<button onclick="generate()">卓報告文を生成</button>
+
+<h2>生成結果</h2>
+<pre id="result"></pre>
+
+<button onclick="copyText()">コピーする</button>
+
+<script>
+function getParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name) || "";
+}
+
+let playerCount = 0;
+
+function addPlayer(pc = "", pl = "") {
+  const container = document.getElementById("players");
+  const div = document.createElement("div");
+  div.style.marginBottom = "8px";
+
+  div.innerHTML = `
+    <input placeholder="PC名" class="pc" value="${pc}">
+    <input placeholder="PL名" class="pl" value="${pl}">
+    <button onclick="this.parentElement.remove()">削除</button>
+  `;
+
+  container.appendChild(div);
+}
+
+function generate() {
+  const system = document.getElementById("system").value;
+  const scenario = document.getElementById("scenario").value;
+  const kp = document.getElementById("kp").value;
+
+  const pcs = document.querySelectorAll(".pc");
+  const pls = document.querySelectorAll(".pl");
+
+  let members = "";
+  let playersData = [];
+
+  pcs.forEach((pc, i) => {
+    const pl = pls[i].value;
+    if (pc.value || pl) {
+      members += `PC / ${pc.value} - ${pl}\n`;
+      playersData.push({ pc: pc.value, pl: pl });
+    }
+  });
+
+  const text =
+`${system}
+◤　${scenario}　◢
+KP：${kp}
+
+${members}
+ღ Scenario clear`;
+
+  document.getElementById("result").textContent = text;
+
+  // 🔗 URL更新
+  const url =
+    `${location.pathname}?` +
+    `system=${encodeURIComponent(system)}` +
+    `&scenario=${encodeURIComponent(scenario)}` +
+    `&kp=${encodeURIComponent(kp)}` +
+    `&players=${encodeURIComponent(JSON.stringify(playersData))}`;
+
+  history.replaceState(null, "", url);
+}
+
+function copyText() {
+  const text = document.getElementById("result").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("コピーしました！");
+  });
+}
+
+// 🔁 URLから復元
+window.onload = () => {
+  document.getElementById("system").value = getParam("system");
+  document.getElementById("scenario").value = getParam("scenario");
+  document.getElementById("kp").value = getParam("kp");
+
+  const players = getParam("players");
+  if (players) {
+    JSON.parse(players).forEach(p => addPlayer(p.pc, p.pl));
+  } else {
+    addPlayer();
+  }
+};
+</script>
+
+
+</body>
+</html>
